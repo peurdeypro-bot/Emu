@@ -1,103 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Récré</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Hortansia</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="menu-view" id="menuView">
+        <header class="intro">
+          <div class="intro-topline">
+            <h1>Hortansia</h1>
+            <button
+              class="theme-toggle"
+              id="themeToggle"
+              type="button"
+              aria-label="Activer le mode sombre"
+            >
+              <span aria-hidden="true">☾</span>
+              <span class="theme-toggle-label">Sombre</span>
+            </button>
+          </div>
+          <p>
+            Petite pause entre de fleur. Clique sur une
+            case pour commencer.
+          </p>
+        </header>
 
-<div class="wrap">
+        <div class="grid">
+          <button class="tile tile--snake" onclick="showGame('snake')">
+            <span class="glyph">🐍</span>
+            <h3>Serpent</h3>
+            <p>Le classique. Flèches ou glisse au doigt.</p>
+          </button>
+          <button class="tile tile--reflex" onclick="showGame('reflex')">
+            <span class="glyph">⚡</span>
+            <h3>Réflexes</h3>
+            <p>Clique dès que ça devient vert.</p>
+          </button>
+          <button class="tile tile--memory" onclick="showGame('memory')">
+            <span class="glyph">🧠</span>
+            <h3>Mémoire</h3>
+            <p>Retrouve les huit paires cachées.</p>
+          </button>
+          <button class="tile tile--morpion" onclick="showGame('morpion')">
+            <span class="glyph">✖️</span>
+            <h3>Morpion</h3>
+            <p>Toi contre l'ordinateur, à deux joueurs locaux.</p>
+          </button>
+        </div>
+      </div>
 
-  <div class="menu-view" id="menuView">
-      <header class="intro">
-            <h1>Récré</h1>
-                  <p>Quatre petits jeux pour une pause de deux minutes. Clique sur une case pour commencer.</p>
-                      </header>
+      <!-- SNAKE -->
+      <div class="game-view" id="view-snake">
+        <button class="back-btn" onclick="backToMenu()">← Retour</button>
+        <div class="game-card">
+          <h2>Serpent</h2>
+          <p class="game-sub">
+            Flèches du clavier, ou glisse le doigt sur l'écran.
+          </p>
+          <div class="game-area">
+            <div class="stat-row">
+              <span>Score : <b id="snakeScore">0</b></span
+              ><span>Record : <b id="snakeBest">0</b></span>
+            </div>
+            <canvas id="snakeCanvas" width="320" height="320"></canvas>
+            <div class="msg" id="snakeMsg"></div>
+            <button class="action" id="snakeBtn" onclick="startSnake()">
+              Jouer
+            </button>
+          </div>
+        </div>
+      </div>
 
-                          <div class="grid">
-                                <button class="tile tile--snake" onclick="showGame('snake')">
-                                        <span class="glyph">🐍</span>
-                                                <h3>Serpent</h3>
-                                                        <p>Le classique. Flèches ou glisse au doigt.</p>
-                                                              </button>
-                                                                    <button class="tile tile--reflex" onclick="showGame('reflex')">
-                                                                            <span class="glyph">⚡</span>
-                                                                                    <h3>Réflexes</h3>
-                                                                                            <p>Clique dès que ça devient vert.</p>
-                                                                                                  </button>
-                                                                                                        <button class="tile tile--memory" onclick="showGame('memory')">
-                                                                                                                <span class="glyph">🧠</span>
-                                                                                                                        <h3>Mémoire</h3>
-                                                                                                                                <p>Retrouve les huit paires cachées.</p>
-                                                                                                                                      </button>
-                                                                                                                                            <button class="tile tile--morpion" onclick="showGame('morpion')">
-                                                                                                                                                    <span class="glyph">✖️</span>
-                                                                                                                                                            <h3>Morpion</h3>
-                                                                                                                                                                    <p>Toi contre l'ordinateur, à deux joueurs locaux.</p>
-                                                                                                                                                                          </button>
-                                                                                                                                                                              </div>
-                                                                                                                                                                                </div>
+      <!-- REFLEX -->
+      <div class="game-view" id="view-reflex">
+        <button class="back-btn" onclick="backToMenu()">← Retour</button>
+        <div class="game-card">
+          <h2>Réflexes</h2>
+          <p class="game-sub">
+            Clique dans la zone dès qu'elle passe au vert. Pas avant.
+          </p>
+          <div class="game-area">
+            <div class="stat-row">
+              <span>Dernier temps : <b id="reflexLast">–</b></span
+              ><span>Meilleur : <b id="reflexBest">–</b></span>
+            </div>
+            <div
+              class="reflex-box reflex-wait"
+              id="reflexBox"
+              onclick="reflexClick()"
+            >
+              Clique pour commencer
+            </div>
+          </div>
+        </div>
+      </div>
 
-                                                                                                                                                                                  <!-- SNAKE -->
-                                                                                                                                                                                    <div class="game-view" id="view-snake">
-                                                                                                                                                                                        <button class="back-btn" onclick="backToMenu()">← Retour</button>
-                                                                                                                                                                                            <div class="game-card">
-                                                                                                                                                                                                  <h2>Serpent</h2>
-                                                                                                                                                                                                        <p class="game-sub">Flèches du clavier, ou glisse le doigt sur l'écran.</p>
-                                                                                                                                                                                                              <div class="game-area">
-                                                                                                                                                                                                                      <div class="stat-row"><span>Score : <b id="snakeScore">0</b></span><span>Record : <b id="snakeBest">0</b></span></div>
-                                                                                                                                                                                                                              <canvas id="snakeCanvas" width="320" height="320"></canvas>
-                                                                                                                                                                                                                                      <div class="msg" id="snakeMsg"></div>
-                                                                                                                                                                                                                                              <button class="action" id="snakeBtn" onclick="startSnake()">Jouer</button>
-                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                          </div>
+      <!-- MEMORY -->
+      <div class="game-view" id="view-memory">
+        <button class="back-btn" onclick="backToMenu()">← Retour</button>
+        <div class="game-card">
+          <h2>Mémoire</h2>
+          <p class="game-sub">
+            Retourne deux cartes à la fois pour trouver les paires.
+          </p>
+          <div class="game-area">
+            <div class="stat-row">
+              <span>Coups : <b id="memMoves">0</b></span
+              ><span>Paires : <b id="memPairs">0</b>/8</span>
+            </div>
+            <div class="memory-grid" id="memoryGrid"></div>
+            <button class="action" onclick="setupMemory()">Recommencer</button>
+          </div>
+        </div>
+      </div>
 
-                                                                                                                                                                                                                                                            <!-- REFLEX -->
-                                                                                                                                                                                                                                                              <div class="game-view" id="view-reflex">
-                                                                                                                                                                                                                                                                  <button class="back-btn" onclick="backToMenu()">← Retour</button>
-                                                                                                                                                                                                                                                                      <div class="game-card">
-                                                                                                                                                                                                                                                                            <h2>Réflexes</h2>
-                                                                                                                                                                                                                                                                                  <p class="game-sub">Clique dans la zone dès qu'elle passe au vert. Pas avant.</p>
-                                                                                                                                                                                                                                                                                        <div class="game-area">
-                                                                                                                                                                                                                                                                                                <div class="stat-row"><span>Dernier temps : <b id="reflexLast">–</b></span><span>Meilleur : <b id="reflexBest">–</b></span></div>
-                                                                                                                                                                                                                                                                                                        <div class="reflex-box reflex-wait" id="reflexBox" onclick="reflexClick()">Clique pour commencer</div>
-                                                                                                                                                                                                                                                                                                              </div>
-                                                                                                                                                                                                                                                                                                                  </div>
-                                                                                                                                                                                                                                                                                                                    </div>
+      <!-- MORPION -->
+      <div class="game-view" id="view-morpion">
+        <button class="back-btn" onclick="backToMenu()">← Retour</button>
+        <div class="game-card">
+          <h2>Morpion</h2>
+          <p class="game-sub">À deux, chacun son tour. X commence.</p>
+          <div class="game-area">
+            <div class="msg" id="morpionMsg">Au tour de X</div>
+            <div class="morpion-grid" id="morpionGrid"></div>
+            <button class="action" onclick="setupMorpion()">Recommencer</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                                                                                                                                                                                                                                                                                                                      <!-- MEMORY -->
-                                                                                                                                                                                                                                                                                                                        <div class="game-view" id="view-memory">
-                                                                                                                                                                                                                                                                                                                            <button class="back-btn" onclick="backToMenu()">← Retour</button>
-                                                                                                                                                                                                                                                                                                                                <div class="game-card">
-                                                                                                                                                                                                                                                                                                                                      <h2>Mémoire</h2>
-                                                                                                                                                                                                                                                                                                                                            <p class="game-sub">Retourne deux cartes à la fois pour trouver les paires.</p>
-                                                                                                                                                                                                                                                                                                                                                  <div class="game-area">
-                                                                                                                                                                                                                                                                                                                                                          <div class="stat-row"><span>Coups : <b id="memMoves">0</b></span><span>Paires : <b id="memPairs">0</b>/8</span></div>
-                                                                                                                                                                                                                                                                                                                                                                  <div class="memory-grid" id="memoryGrid"></div>
-                                                                                                                                                                                                                                                                                                                                                                          <button class="action" onclick="setupMemory()">Recommencer</button>
-                                                                                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                      </div>
-
-                                                                                                                                                                                                                                                                                                                                                                                        <!-- MORPION -->
-                                                                                                                                                                                                                                                                                                                                                                                          <div class="game-view" id="view-morpion">
-                                                                                                                                                                                                                                                                                                                                                                                              <button class="back-btn" onclick="backToMenu()">← Retour</button>
-                                                                                                                                                                                                                                                                                                                                                                                                  <div class="game-card">
-                                                                                                                                                                                                                                                                                                                                                                                                        <h2>Morpion</h2>
-                                                                                                                                                                                                                                                                                                                                                                                                              <p class="game-sub">À deux, chacun son tour. X commence.</p>
-                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="game-area">
-                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="msg" id="morpionMsg">Au tour de X</div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="morpion-grid" id="morpionGrid"></div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                            <button class="action" onclick="setupMorpion()">Recommencer</button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                  </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                      </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        <script src="script.js"></script>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        </body>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        </html>
+    <script src="script.js"></script>
+  </body>
+</html>
